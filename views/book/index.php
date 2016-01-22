@@ -38,8 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'preview',
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::a(Html::img('images/'.$data->preview, ['height'=>'50']),'index.php?r=book/show&id='.$data->id);;
-                    // return Html::img('images/'.$data->preview, ['height'=>'50']);
+                    return Html::a(Html::img('images/'.$data->preview, ['height'=>'50']),'show&id='.$data->id);;
                 },
             ],
             
@@ -76,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $this->registerJs(
     "$('.activity-view-link').click(function() {
     $.get(
-        'index.php?r=book/viewm',         
+        'viewm',         
         {
             id: $(this).closest('tr').data('key')
         },
