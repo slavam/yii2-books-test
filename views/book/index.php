@@ -13,25 +13,12 @@ $this->title = Yii::t('app', 'Книги');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-
-
-
-<?php Modal::begin([
- 'id' => 'preview-modal',
- 'header' => '<h4 class="modal-title">Просмотр</h4>',
-//  'toggleButton' => ['label'=> 'Window'],
- 'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Закрыть</a>',
-]); 
-
-Modal::end(); ?>
-
-
 <div class="book-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-
+<?php  \yii\widgets\Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -51,53 +38,68 @@ Modal::end(); ?>
                 'attribute' => 'preview',
                 'format' => 'html',
                 'value' => function ($data) {
-                    return Html::img('images/'.$data->preview, ['height'=>'50']);
-                    
+                    return Html::a(Html::img('images/'.$data->preview, ['height'=>'50']),'index.php?r=book/show&id='.$data->id);;
+                    // return Html::img('images/'.$data->preview, ['height'=>'50']);
                 },
             ],
             
             'issue',
 
-             ['class' => 'yii\grid\ActionColumn'],
-            // [
-            //     'class' => \yii\grid\ActionColumn::className(),
-            //     'buttons' => [
-            //         'view' => function ($url, $model, $key) {
-            //             return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '#', [
-            //                 'class' => 'preview-link',
-            //                 'title' => 'Просмотр',
-            //                 'data-toggle' => 'modal',
-            //                 'data-target' => '#preview-modal',
-            //                 'data-id' => $key,
-            //                 'data-pjax' => '0',
-            //             ]);
-            //         },
-            //     ],
-            // ]
+            //  ['class' => 'yii\grid\ActionColumn'],
+            [   'class' => 'yii\grid\ActionColumn', 
+                'template' => '{view} {update} {delete}',
+                'headerOptions' => ['width' => '20%', 'class' => 'activity-view-link',],        
+                'contentOptions' => ['class' => 'padding-left-5px'],
+
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','#', [
+                            'class' => 'activity-view-link',
+                            'title' => Yii::t('yii', 'View'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#activity-modal',
+                            'data-id' => $key,
+                            'data-pjax' => '0',
+                        ]);
+                    },
+                ],
+
+            ],
 
         ],
     ]); ?>
 
+<?php  \yii\widgets\Pjax::end(); ?>
+
 </div>
 
-
-<?php
-$loadUrl = \yii\helpers\Url::to('index.php?r=book/view');    //('/book/view');
-$js = <<<JS
-$('.preview-link').click(function() {
-
+<?php $this->registerJs(
+    "$('.activity-view-link').click(function() {
     $.get(
-        "{$loadUrl}",
+        'index.php?r=book/viewm',         
         {
             id: $(this).closest('tr').data('key')
         },
         function (data) {
-        
-            $('.modal-body','#preview-modal').html(data);
-            $('#preview-modal').modal();
-        }
+            
+            $('#activity-modal').find('.modal-body').html(data);
+            $('#activity-modal').modal();
+        }  
     );
 });
-JS;
-$this->registerJs($js);
-?>
+    "
+); ?>
+
+<?php yii\bootstrap\Modal::begin([
+    'id' => 'activity-modal',
+    'header' => '<h4 class="modal-title">Просмотр</h4>',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Закрыть</a>',
+
+]); ?>
+
+<div class="well">
+
+
+</div>
+
+<?php yii\bootstrap\Modal::end(); ?>

@@ -48,7 +48,7 @@ class Book extends \yii\db\ActiveRecord
             'title' => Yii::t('app', 'Название'),
             'author_id' => Yii::t('app', 'Автор'),
             'created_at' => Yii::t('app', 'Дата добавления'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'updated_at' => Yii::t('app', 'Обновлено'),
             'preview' => Yii::t('app', 'Превью'),
             'issue' => Yii::t('app', 'Дата выхода книги'),
         ];

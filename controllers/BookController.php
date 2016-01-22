@@ -66,6 +66,23 @@ class BookController extends Controller
         // return $this->renderAjax('view', ['id' => $model->id]);
     }
 
+
+    public function actionViewm($id)
+    {
+        $this->layout = false;
+        return $this->render('viewm', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionShow($id)
+    {
+        $this->layout = false;
+        return $this->render('show', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
     /**
      * Creates a new Book model.
      * If creation is successful, the browser will be redirected to the 'view' page.
